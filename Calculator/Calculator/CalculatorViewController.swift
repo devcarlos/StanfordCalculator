@@ -25,7 +25,14 @@ class CalculatorViewController: UIViewController {
             return Double(self.display.text!)!
         }
         set {
-            self.display.text = String(newValue)
+            var value = String(newValue)
+            let s = value as NSString
+            let zero = s.substringFromIndex(s.length-2)
+            if zero == ".0" {
+                value = value.stringByReplacingOccurrencesOfString(".0", withString: "")
+            }
+            
+            self.display.text = value
         }
     }
     
@@ -49,7 +56,15 @@ class CalculatorViewController: UIViewController {
         
         if self.isTyping {
             let text = self.display.text!
-            self.display.text = text + digit
+            let number = text + digit
+            
+            if digit == "." {
+                if !text.containsString(".") {
+                    self.display.text = number
+                }
+            } else {
+                self.display.text = number
+            }
         } else {
             self.display.text = digit
         }
